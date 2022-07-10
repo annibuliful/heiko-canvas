@@ -10,9 +10,9 @@ interface ITriangleParam extends ICanvasObjectParam {
 }
 
 interface IComputeAreaParam {
+  p0: I2dPosition;
   p1: I2dPosition;
   p2: I2dPosition;
-  p3: I2dPosition;
 }
 export class CanvasTriangle extends CanvasObject {
   x: number;
@@ -44,12 +44,13 @@ export class CanvasTriangle extends CanvasObject {
 
     this.renderStrokeStyle(ctx);
     this.renderFillStyle(ctx);
-    const [firstPoint, secondPoint, thirdPoint] = this.points;
 
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(firstPoint.x, firstPoint.y);
-    ctx.lineTo(firstPoint.x, secondPoint.y);
-    ctx.lineTo(secondPoint.x, thirdPoint.y);
+    ctx.moveTo(this.x + this.points[0].x, this.y + this.points[0].y);
+
+    for (const point of this.points) {
+      ctx.lineTo(this.x + point.x, this.y + point.y);
+    }
+
     if (this.fill) {
       ctx.fill();
     }
@@ -58,60 +59,36 @@ export class CanvasTriangle extends CanvasObject {
     ctx.closePath();
   }
 
-  // https://en.wikipedia.org/wiki/Heron%27s_formula
-  computeArea({ p1, p2, p3 }: IComputeAreaParam) {
-    return Math.abs(
-      (p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)) / 2.0
+  //https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+  computeArea({ p1, p2, p0 }: IComputeAreaParam) {
+    return (
+      (1 / 2) *
+      (-p1.y * p2.x +
+        p0.y * (-p1.x + p2.x) +
+        p0.x * (p1.y - p2.y) +
+        p1.x * p2.y)
     );
   }
 
-  contains(point: I2dPosition): boolean {
-    const [firstPoint, secondPoint, thirdPoint] = this.points;
+  contains(p: I2dPosition): boolean {
+    const [p0, p1, p2] = this.points;
 
-    const originalArea = this.computeArea({
-      p1: firstPoint,
-      p2: secondPoint,
-      p3: thirdPoint,
+    const area = this.computeArea({
+      p0,
+      p1,
+      p2,
     });
 
-    const areaOne = this.computeArea({
-      p1: point,
-      p2: firstPoint,
-      p3: secondPoint,
-    });
+    const sign = area < 0 ? -1 : 1;
 
-    const areaTwo = this.computeArea({
-      p1: firstPoint,
-      p2: point,
-      p3: thirdPoint,
-    });
+    const s =
+      (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) *
+      sign;
 
-    const areaThree = this.computeArea({
-      p1: firstPoint,
-      p2: secondPoint,
-      p3: point,
-    });
+    const t =
+      (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) *
+      sign;
 
-    return originalArea === areaOne + areaTwo + areaThree;
-  }
-
-  override set(options: Partial<this>): void {
-    const entries = Object.entries(options);
-
-    for (const [key, value] of entries) {
-      this[key as keyof this] = value;
-    }
-
-    if (options.x) {
-      for (let i = 0; i < this.points.length; i++) {
-        this.points[i].x = options.x;
-      }
-    }
-
-    if (options.y) {
-      for (let i = 0; i < this.points.length; i++) {
-        this.points[i].y = options.y;
-      }
-    }
+    return s > 0 && t > 0 && s + t < 2 * area * sign;
   }
 }
