@@ -43,6 +43,9 @@ export class CanvasManager {
   }
 
   add<T extends CanvasObject>(object: T) {
+    const isDuplicate = this._objects.some((o) => o.id === object.id);
+    if (isDuplicate) return;
+
     this._objects.push(object);
   }
 

@@ -1,7 +1,9 @@
+import { nanoid } from 'nanoid';
 import { I2dPosition } from '../@types/object';
 import { convertColorToRGBA } from '../utils/color';
 
 export interface ICanvasObjectParam {
+  id?: string;
   opacity?: number;
   visible?: boolean;
 }
@@ -12,6 +14,8 @@ export abstract class CanvasObject {
   opacity = 1;
   angle = 0;
   visible = true;
+  id: string;
+
   abstract x: number;
   abstract y: number;
 
@@ -24,7 +28,12 @@ export abstract class CanvasObject {
 
   abstract get centerPoint(): I2dPosition;
 
-  constructor({ visible = true, opacity = 1 }: ICanvasObjectParam) {
+  constructor({
+    visible = true,
+    opacity = 1,
+    id = nanoid(),
+  }: ICanvasObjectParam) {
+    this.id = id;
     this.visible = visible;
     this.opacity = opacity;
   }

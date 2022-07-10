@@ -166,6 +166,14 @@ export function Index() {
             <button onClick={handleAddTri}>add Triangle</button>
             <br />
             <button onClick={handleAddMultipleRects}>Add Rects</button>
+            <br />
+            <button
+              onClick={() => {
+                console.log(canvasManager.current.getObjects());
+              }}
+            >
+              List Objects
+            </button>
 
             <p>
               Position: x = {currentX}, y = {currentY}
