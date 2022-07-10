@@ -52,17 +52,16 @@ export class CanvasTriangle extends CanvasObject {
 
     ctx.moveTo(this.x + this.points[0].x, this.y + this.points[0].y);
 
-    for (let i = 1; i < this.points.length; i++) {
-      ctx.lineTo(this.x + this.points[i].x, this.y + this.points[i].y);
+    for (const point of this.points) {
+      ctx.lineTo(this.x + point.x, this.y + point.y);
     }
 
     if (this.fill) {
       ctx.fill();
     }
 
-    ctx.stroke();
     ctx.closePath();
-    ctx.moveTo(0, 0);
+    ctx.stroke();
   }
 
   get computedPoints() {
