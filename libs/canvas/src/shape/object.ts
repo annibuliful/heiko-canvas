@@ -46,7 +46,13 @@ export abstract class CanvasObject {
     }
   }
 
-  abstract render(context: CanvasRenderingContext2D): void;
-  abstract set(options: Partial<this>): void;
+  set(options: Partial<this>): void {
+    for (const [key, value] of Object.entries(options)) {
+      this[key as keyof this] = value;
+    }
+  }
+
+  abstract render(ctx: CanvasRenderingContext2D): void;
+
   abstract contains(point: I2dPosition): boolean;
 }
