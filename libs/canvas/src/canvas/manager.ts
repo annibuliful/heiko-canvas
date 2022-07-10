@@ -7,8 +7,10 @@ export class CanvasManager {
   private _objects: CanvasObject[] = [];
   private isDragging = false;
   private activeObject: CanvasObject | null = null;
-  private dragHoldX = -1;
-  private dragHoldY = -1;
+  private dragHoldX = 0;
+  private dragHoldY = 0;
+  currentX = -1;
+  currentY = -1;
 
   constructor(canvas: HTMLCanvasElement | string) {
     if (canvas instanceof HTMLCanvasElement) {
@@ -91,9 +93,10 @@ export class CanvasManager {
     e.preventDefault();
     e.stopPropagation();
 
-    this.canvas.style.cursor = 'default';
-
     const point = this.getMousePoint({ x: e.clientX, y: e.clientY });
+    this.currentX = point.x - this.dragHoldX;
+    this.currentY = point.y - this.dragHoldY;
+    this.canvas.style.cursor = 'default';
 
     if (this.isDragging && this.activeObject) {
       this.activeObject.set({

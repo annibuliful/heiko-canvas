@@ -9,11 +9,6 @@ interface ITriangleParam extends ICanvasObjectParam {
   y: number;
 }
 
-interface IComputeAreaParam {
-  p0: I2dPosition;
-  p1: I2dPosition;
-  p2: I2dPosition;
-}
 export class CanvasTriangle extends CanvasObject {
   x: number;
   y: number;
@@ -57,38 +52,26 @@ export class CanvasTriangle extends CanvasObject {
 
     ctx.stroke();
     ctx.closePath();
-  }
-
-  //https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
-  computeArea({ p1, p2, p0 }: IComputeAreaParam) {
-    return (
-      (1 / 2) *
-      (-p1.y * p2.x +
-        p0.y * (-p1.x + p2.x) +
-        p0.x * (p1.y - p2.y) +
-        p1.x * p2.y)
-    );
+    ctx.moveTo(0, 0);
   }
 
   contains(p: I2dPosition): boolean {
-    const [p0, p1, p2] = this.points;
+    const [p1, p2, p3] = this.points;
 
-    const area = this.computeArea({
-      p0,
-      p1,
-      p2,
-    });
+    const areaOrig = Math.abs(
+      (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)
+    );
 
-    const sign = area < 0 ? -1 : 1;
+    const area1 = Math.abs(
+      (p1.x - p.x) * (p2.y - p.y) - (p2.x - p.x) * (p1.y - p.y)
+    );
+    const area2 = Math.abs(
+      (p2.x - p.x) * (p3.y - p.y) - (p3.x - p.x) * (p2.y - p.y)
+    );
+    const area3 = Math.abs(
+      (p3.x - p.x) * (p1.y - p.y) - (p1.x - p.x) * (p3.y - p.y)
+    );
 
-    const s =
-      (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) *
-      sign;
-
-    const t =
-      (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) *
-      sign;
-
-    return s > 0 && t > 0 && s + t < 2 * area * sign;
+    return area1 + area2 + area3 === areaOrig;
   }
 }

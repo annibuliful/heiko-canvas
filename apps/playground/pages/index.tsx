@@ -5,11 +5,13 @@ import {
   CanvasTriangle,
   randomBetween,
 } from '@heiko-canvas/canvas';
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 export function Index() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasManager = useRef<CanvasManager>(null);
+  const [currentX, setCurrentX] = useState(0);
+  const [currentY, setCurrentY] = useState(0);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -48,6 +50,16 @@ export function Index() {
       canvasManager.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (canvasManager.current?.currentX) {
+      setCurrentX(canvasManager.current?.currentX);
+    }
+
+    if (canvasManager.current?.currentY) {
+      setCurrentY(canvasManager.current?.currentY);
+    }
+  }, [canvasManager.current?.currentX, canvasManager.current?.currentY]);
 
   const handleAddRect = () => {
     const dimension = randomBetween(50, 500);
@@ -114,9 +126,9 @@ export function Index() {
       x: 100,
       y: 100,
       points: [
-        { x: 100, y: 100 },
-        { x: 10, y: 10 },
-        { x: 50, y: 50 },
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
       ],
     });
     canvasManager.current.add(tri);
@@ -132,8 +144,14 @@ export function Index() {
       </p>
       <div>
         <button onClick={handleAddRect}>Add Rect</button>
+        <br />
         <button onClick={handleAddTri}>add Triangle</button>
+        <br />
         <button onClick={handleAddMultipleRects}>Add Rects</button>
+
+        <p>
+          Position: x = {currentX}, y = {currentY}
+        </p>
         <p>
           <span>Opacity: </span>{' '}
           <input
