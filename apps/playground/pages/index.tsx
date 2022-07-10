@@ -2,6 +2,7 @@ import {
   CanvasCircle,
   CanvasManager,
   CanvasRectangle,
+  CanvasTriangle,
   randomBetween,
 } from '@heiko-canvas/canvas';
 import { ChangeEvent, useEffect, useRef } from 'react';
@@ -108,6 +109,20 @@ export function Index() {
     canvasManager.current.renderAll();
   };
 
+  const handleAddTri = () => {
+    const tri = new CanvasTriangle({
+      x: 100,
+      y: 100,
+      points: [
+        { x: 100, y: 100 },
+        { x: 10, y: 10 },
+        { x: 50, y: 50 },
+      ],
+    });
+    canvasManager.current.add(tri);
+    canvasManager.current.renderAll();
+  };
+
   return (
     <div>
       <p
@@ -117,6 +132,7 @@ export function Index() {
       </p>
       <div>
         <button onClick={handleAddRect}>Add Rect</button>
+        <button onClick={handleAddTri}>add Triangle</button>
         <button onClick={handleAddMultipleRects}>Add Rects</button>
         <p>
           <span>Opacity: </span>{' '}
