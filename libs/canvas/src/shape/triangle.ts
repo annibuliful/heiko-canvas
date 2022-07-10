@@ -1,4 +1,5 @@
 import { I2dPosition } from '../@types/object';
+import { getBoundingBox } from '../math/trigometry';
 import { CanvasObject, ICanvasObjectParam } from './object';
 
 export type TrianglePoint = [I2dPosition, I2dPosition, I2dPosition];
@@ -27,11 +28,20 @@ export class CanvasTriangle extends CanvasObject {
     bottomLeft: I2dPosition;
     bottomRight: I2dPosition;
   } {
-    throw new Error('Method not implemented.');
+    return getBoundingBox({
+      origin: { x: this.centerPoint.x, y: this.centerPoint.y },
+      points: this.points,
+      angle: this.angle,
+    });
   }
+
   get centerPoint(): I2dPosition {
-    throw new Error('Method not implemented.');
+    return {
+      x: (this.points[0].x + this.points[1].x + this.points[2].x) / 3,
+      y: (this.points[0].y + this.points[1].y + this.points[2].y) / 3,
+    };
   }
+
   render(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
 
@@ -42,8 +52,8 @@ export class CanvasTriangle extends CanvasObject {
 
     ctx.moveTo(this.x + this.points[0].x, this.y + this.points[0].y);
 
-    for (const point of this.points) {
-      ctx.lineTo(this.x + point.x, this.y + point.y);
+    for (let i = 1; i < this.points.length; i++) {
+      ctx.lineTo(this.x + this.points[i].x, this.y + this.points[i].y);
     }
 
     if (this.fill) {
@@ -55,8 +65,21 @@ export class CanvasTriangle extends CanvasObject {
     ctx.moveTo(0, 0);
   }
 
+  get computedPoints() {
+    const points: I2dPosition[] = [];
+
+    for (const point of this.points) {
+      points.push({
+        x: this.x + point.x,
+        y: this.y + point.y,
+      });
+    }
+
+    return points;
+  }
+
   contains(p: I2dPosition): boolean {
-    const [p1, p2, p3] = this.points;
+    const [p1, p2, p3] = this.computedPoints;
 
     const areaOrig = Math.abs(
       (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)

@@ -71,7 +71,7 @@ type GetBoundingBoxParam = Omit<
   CalculateRotatePointParam,
   'point' | 'angle'
 > & {
-  points: [I2dPosition, I2dPosition, I2dPosition, I2dPosition];
+  points: I2dPosition[];
   angle?: number;
 };
 

@@ -10,6 +10,7 @@ export abstract class CanvasObject {
   stroke: string | CanvasGradient | CanvasPattern = 'transparent';
   lineWidth = 1;
   opacity = 1;
+  angle = 0;
   visible = true;
   abstract x: number;
   abstract y: number;
