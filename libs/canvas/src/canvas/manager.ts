@@ -96,8 +96,10 @@ export class CanvasManager {
     const point = this.getMousePoint({ x: e.clientX, y: e.clientY });
 
     if (this.isDragging && this.activeObject) {
-      this.activeObject.x = point.x - this.dragHoldX;
-      this.activeObject.y = point.y - this.dragHoldY;
+      this.activeObject.set({
+        x: point.x - this.dragHoldX,
+        y: point.y - this.dragHoldY,
+      });
       this.renderAll();
     }
 
