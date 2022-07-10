@@ -40,7 +40,18 @@ export function Index() {
     });
     const circle = new CanvasCircle({ x: 100, y: 100, radius: 100 });
 
+    const tri = new CanvasTriangle({
+      x: 250,
+      y: 250,
+      points: [
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
+        { x: randomBetween(10, 100), y: randomBetween(10, 100) },
+      ],
+    });
+
     canvasManager.current.add(circle);
+    canvasManager.current.add(tri);
     canvasManager.current.add(rect1);
     canvasManager.current.add(rect2);
     canvasManager.current.renderAll();
@@ -123,8 +134,8 @@ export function Index() {
 
   const handleAddTri = () => {
     const tri = new CanvasTriangle({
-      x: 100,
-      y: 100,
+      x: randomBetween(0, canvasRef.current.height),
+      y: randomBetween(0, canvasRef.current.height),
       points: [
         { x: randomBetween(10, 100), y: randomBetween(10, 100) },
         { x: randomBetween(10, 100), y: randomBetween(10, 100) },
@@ -138,60 +149,76 @@ export function Index() {
   return (
     <div>
       <p
-        style={{ textAlign: 'center', fontSize: '20px', marginBottom: '100px' }}
+        style={{
+          textAlign: 'center',
+          fontSize: '20px',
+          marginBottom: '100px',
+        }}
       >
         Playground
       </p>
-      <div>
-        <button onClick={handleAddRect}>Add Rect</button>
-        <br />
-        <button onClick={handleAddTri}>add Triangle</button>
-        <br />
-        <button onClick={handleAddMultipleRects}>Add Rects</button>
 
-        <p>
-          Position: x = {currentX}, y = {currentY}
-        </p>
-        <p>
-          <span>Opacity: </span>{' '}
-          <input
-            type="number"
-            onChange={handleChangeOpacity}
-            min={0}
-            max={1}
-            step={0.1}
-            defaultValue={1}
-          />
-        </p>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '20%' }}>
+          <div>
+            <button onClick={handleAddRect}>Add Rect</button>
+            <br />
+            <button onClick={handleAddTri}>add Triangle</button>
+            <br />
+            <button onClick={handleAddMultipleRects}>Add Rects</button>
 
-        <p>
-          <span>Line width: </span>{' '}
-          <input
-            type="number"
-            onChange={handleChangeLineWidth}
-            min={0}
-            step={0.1}
-            defaultValue={1}
-          />
-        </p>
-        <p>
-          <span>Color: </span>{' '}
-          <input type="color" onChange={handleChangeColor} />
-        </p>
-        <p>
-          <span>Stroke Color: </span>{' '}
-          <input type="color" onChange={handleChangeStrokeColor} />
-        </p>
-        <p>
-          <span>Visible: </span>
-          <input
-            type="checkbox"
-            onChange={handleVisible}
-            defaultChecked={true}
-          />
-        </p>
+            <p>
+              Position: x = {currentX}, y = {currentY}
+            </p>
+            <p>
+              <span>Opacity: </span>{' '}
+              <input
+                type="number"
+                onChange={handleChangeOpacity}
+                min={0}
+                max={1}
+                step={0.1}
+                defaultValue={1}
+              />
+            </p>
+
+            <p>
+              <span>Line width: </span>{' '}
+              <input
+                type="number"
+                onChange={handleChangeLineWidth}
+                min={0}
+                step={0.1}
+                defaultValue={1}
+              />
+            </p>
+            <p>
+              <span>Color: </span>{' '}
+              <input type="color" onChange={handleChangeColor} />
+            </p>
+            <p>
+              <span>Stroke Color: </span>{' '}
+              <input type="color" onChange={handleChangeStrokeColor} />
+            </p>
+            <p>
+              <span>Visible: </span>
+              <input
+                type="checkbox"
+                onChange={handleVisible}
+                defaultChecked={true}
+              />
+            </p>
+          </div>
+        </div>
+        <canvas
+          ref={canvasRef}
+          style={{
+            display: 'block',
+            margin: 'auto',
+            border: '1px solid black',
+          }}
+        />
       </div>
-      <canvas ref={canvasRef} style={{ display: 'block', margin: 'auto' }} />
     </div>
   );
 }
