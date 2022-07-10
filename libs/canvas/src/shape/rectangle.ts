@@ -115,10 +115,4 @@ export class CanvasRectangle extends CanvasObject {
       isInsideAboveAndBottomEdge
     );
   }
-
-  set(options: Partial<this>): void {
-    for (const [key, value] of Object.entries(options)) {
-      this[key as keyof this] = value;
-    }
-  }
 }

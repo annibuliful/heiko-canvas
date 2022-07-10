@@ -76,10 +76,4 @@ export class CanvasCircle extends CanvasObject {
 
     return distance <= this.radius;
   }
-
-  set(options: Partial<this>): void {
-    for (const [key, value] of Object.entries(options)) {
-      this[key as keyof this] = value;
-    }
-  }
 }
