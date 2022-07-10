@@ -1,0 +1,7 @@
+[build.environment]
+  NODE_VERSION = "14"
+  NPM_FLAGS = "--prefix=/dev/null"
+
+[build]
+  command = "npx pnpm i --frozen-lockfile=false --store=node_modules && npm run build-static:playground"
+  publish = "dist/apps/playground/exported"

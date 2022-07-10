@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "canvas": "libs/canvas",
+    "editor": "apps/editor",
+    "editor-e2e": "apps/editor-e2e",
+    "playground": "apps/playground",
+    "playground-e2e": "apps/playground-e2e"
+  }
+}
